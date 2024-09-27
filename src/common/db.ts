@@ -1,8 +1,8 @@
 import { Sequelize } from "sequelize";
 import { env } from "./env";
 import { logger } from "./logger";
-import { User } from "./models/user.model";
-import { Club } from "./models/club.model";
+import { User } from "../models/user.model";
+import { Club } from "../models/club.model";
 
 const sequelize = new Sequelize(
     env.db.schema,

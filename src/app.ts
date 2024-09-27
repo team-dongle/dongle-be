@@ -1,10 +1,10 @@
-import { env } from "./env";
+import { env } from "./common/env";
 import express from "express";
-import { logger } from "./logger";
-import morganMiddleware from "./morganMiddleware";
+import { logger } from "./common/logger";
+import morganMiddleware from "./common/morganMiddleware";
 import cors from "cors";
 import * as Api from "./app.router";
-import * as db from "./db";
+import * as db from "./common/db";
 
 const app = express();
 
