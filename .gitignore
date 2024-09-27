@@ -177,3 +177,5 @@ dist
 
 .env
 .env.*
+
+*.sql
