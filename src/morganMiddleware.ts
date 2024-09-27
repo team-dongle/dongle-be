@@ -5,7 +5,13 @@ import { logger } from "./logger";
 const format = env.port === "production" ? "combined" : "dev";
 
 const stream = {
-    write: (message) => logger.info(message),
+    write: (message) =>
+        logger.info(
+            message.replace(
+                /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+                ""
+            )
+        ),
 };
 
 const skip = (_, res) => {
