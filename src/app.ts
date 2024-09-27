@@ -4,6 +4,7 @@ import { logger } from "./logger";
 import morganMiddleware from "./morganMiddleware";
 import cors from "cors";
 import * as Api from "./app.router";
+import * as db from "./db";
 
 const app = express();
 
@@ -19,6 +20,8 @@ app.use(
 // routes
 app.use(Api.path, Api.router);
 
-app.listen(env.port, () => {
+app.listen(env.port, async () => {
     logger.info(`Server is listening on PORT ${env.port}`);
+
+    await db.connect();
 });
