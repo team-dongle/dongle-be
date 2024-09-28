@@ -1,8 +1,12 @@
 import { Sequelize } from "sequelize";
 import { env } from "./env";
 import { logger } from "./logger";
-import { User } from "../models/user.model";
-import { Club } from "../models/club.model";
+import fs from "fs";
+import path from "path";
+
+const modelFiles = fs
+    .readdirSync(path.join(__dirname, "/../models/"))
+    .filter((file) => file.endsWith(".ts"));
 
 const sequelize = new Sequelize(
     env.db.schema,
@@ -27,12 +31,37 @@ const sequelize = new Sequelize(
     }
 );
 
-export const connect = async () => {
-    User.initialize(sequelize);
-    Club.initialize(sequelize);
+const initialize = (sequelize: Sequelize) => {
+    try {
+        modelFiles.forEach(async (modelFile) => {
+            const model = await import(
+                path.join(__dirname, `/../models/${modelFile}`)
+            );
+            console.log(typeof model);
+            model.default.initialize(sequelize);
+        });
+    } catch (e) {
+        logger.error(`Failed to initialize models: ${e}`);
+    }
+};
 
-    User.associate();
-    Club.associate();
+const associate = () => {
+    try {
+        modelFiles.forEach(async (modelFile) => {
+            const model = await import(
+                path.join(__dirname, `/../models/${modelFile}`)
+            );
+
+            model.default.associate();
+        });
+    } catch (e) {
+        logger.error(`Failed to associating models: ${e}`);
+    }
+};
+
+export const connect = () => {
+    initialize(sequelize);
+    associate();
 
     sequelize
         .authenticate()
