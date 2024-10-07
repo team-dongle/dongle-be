@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import User from "./user.model";
 import Category from "./category.model";
+import { IClub } from "../@types/club";
+import User from "./user.model";
 
 export default class Club extends Model<IClub> {
     static initialize(sequelize: Sequelize) {
@@ -11,6 +12,7 @@ export default class Club extends Model<IClub> {
                     type: DataTypes.INTEGER(),
                     allowNull: false,
                     primaryKey: true,
+                    unique: true,
                 },
                 name: {
                     type: DataTypes.STRING(255),
@@ -40,17 +42,33 @@ export default class Club extends Model<IClub> {
                     type: DataTypes.STRING(255),
                     allowNull: false,
                 },
-                owner: {
-                    type: DataTypes.STRING(255),
-                    allowNull: false,
+                detail: {
+                    type: DataTypes.TEXT(),
+                    allowNull: true,
                 },
                 recruitPeriod: {
                     type: DataTypes.DATE(),
                     allowNull: false,
                 },
+
                 isRecruiting: {
                     type: DataTypes.BOOLEAN(),
                     allowNull: false,
+                    get() {
+                        return this.dataValues.isRecruiting ? true : false;
+                    },
+                },
+                createdAt: {
+                    type: DataTypes.DATE(),
+                    defaultValue: sequelize.fn("NOW"),
+                },
+                updatedAt: {
+                    type: DataTypes.DATE(),
+                    defaultValue: sequelize.fn("NOW"),
+                },
+                deletedAt: {
+                    type: DataTypes.DATE(),
+                    allowNull: true,
                 },
             },
             {
@@ -59,6 +77,8 @@ export default class Club extends Model<IClub> {
                 modelName: "club",
                 charset: "utf8",
                 collate: "utf8_unicode_ci",
+                paranoid: true,
+                timestamps: true,
             }
         );
 
@@ -66,14 +86,16 @@ export default class Club extends Model<IClub> {
     }
 
     static associate() {
-        this.belongsTo(User, {
-            foreignKey: "clubId",
+        this.belongsTo(Category, {
+            foreignKey: "categoryId",
+            as: "category",
             targetKey: "_id",
         });
 
-        this.hasOne(Category, {
-            foreignKey: "category",
-            sourceKey: "_id",
+        this.belongsTo(User, {
+            foreignKey: "ownerId",
+            as: "owner",
+            targetKey: "_id",
         });
     }
 }

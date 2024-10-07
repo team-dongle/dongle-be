@@ -1,6 +1,6 @@
-import { env } from "./env";
+import { env } from "../env";
 import morgan from "morgan";
-import { logger } from "./logger";
+import { logger } from "../logger";
 
 const format = env.port === "production" ? "combined" : "dev";
 

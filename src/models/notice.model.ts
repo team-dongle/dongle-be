@@ -10,6 +10,7 @@ export default class Notice extends Model<INotice> {
                     type: DataTypes.INTEGER(),
                     allowNull: false,
                     primaryKey: true,
+                    unique: true,
                 },
                 title: {
                     type: DataTypes.STRING(50),
@@ -19,6 +20,18 @@ export default class Notice extends Model<INotice> {
                     type: DataTypes.STRING(50),
                     allowNull: false,
                 },
+                createdAt: {
+                    type: DataTypes.DATE(),
+                    defaultValue: sequelize.fn("NOW"),
+                },
+                updatedAt: {
+                    type: DataTypes.DATE(),
+                    defaultValue: sequelize.fn("NOW"),
+                },
+                deletedAt: {
+                    type: DataTypes.DATE(),
+                    allowNull: true,
+                },
             },
             {
                 sequelize,
@@ -26,6 +39,8 @@ export default class Notice extends Model<INotice> {
                 modelName: "notice",
                 charset: "utf8",
                 collate: "utf8_unicode_ci",
+                paranoid: true,
+                timestamps: true,
             }
         );
     }

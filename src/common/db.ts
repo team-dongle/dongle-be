@@ -26,7 +26,7 @@ const sequelize = new Sequelize(
         timezone: "+09:00",
         logging: (message) => {
             if (message.includes("SELECT 1+1 AS result")) return;
-            logger.info(message);
+            // logger.info(message);
         },
     }
 );
@@ -37,7 +37,6 @@ const initialize = (sequelize: Sequelize) => {
             const model = await import(
                 path.join(__dirname, `/../models/${modelFile}`)
             );
-            console.log(typeof model);
             model.default.initialize(sequelize);
         });
     } catch (e) {
@@ -68,14 +67,18 @@ export const connect = () => {
         .then(() => {
             logger.info("Successfully connected to mysql server.");
             sequelize
-                .sync()
+                .sync({
+                    alter: process.env.NODE_ENV === "production" ? false : true,
+                })
                 .then(() => {
                     logger.info(
-                        "Successfully created model tables to mysql server."
+                        "Successfully synchronized model tables to mysql server."
                     );
                 })
                 .catch((e) => {
-                    logger.error(`An Error occured while create table: ${e}`);
+                    logger.error(
+                        `An Error occured while synchronizing table: ${e}`
+                    );
                 });
         })
         .catch((e) => {

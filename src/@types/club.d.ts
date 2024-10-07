@@ -1,4 +1,8 @@
-interface IClub {
+import { NonAttribute } from "sequelize";
+import Category from "../models/category.model";
+import User from "../models/user.model";
+
+export interface IClub {
     _id: number;
     name: string;
     contact: string;
@@ -7,7 +11,12 @@ interface IClub {
     location: string;
     sns: string;
     logo: string;
-    owner: number;
+    ownerId?: NonAttribute<User>;
+    detail: string;
     recruitPeriod: Date;
     isRecruiting: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
+    deletedAt?: Date;
+    categoryId?: NonAttribute<Category>;
 }

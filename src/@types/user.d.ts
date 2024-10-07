@@ -5,5 +5,6 @@ interface IUser {
     name: string;
     role: string;
     createdAt: Date;
-    updatedAt: Date;
+    updatedAt?: Date;
+    deletedAt?: Date;
 }
