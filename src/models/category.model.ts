@@ -1,11 +1,9 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import Club from "./club.model";
-import Notice from "./notice.model";
-import bcrypt from "bcryptjs";
 
-export default class User extends Model<IUser> {
+export default class Category extends Model<ICategory> {
     static initialize(sequelize: Sequelize) {
-        User.init(
+        Category.init(
             {
                 _id: {
                     autoIncrement: true,
@@ -14,21 +12,12 @@ export default class User extends Model<IUser> {
                     primaryKey: true,
                     unique: true,
                 },
-                username: {
-                    type: DataTypes.STRING(20),
-                    allowNull: false,
-                    unique: true,
-                },
-                password: {
-                    type: DataTypes.STRING(255),
-                    allowNull: false,
-                },
                 name: {
                     type: DataTypes.STRING(20),
                     allowNull: false,
                 },
-                role: {
-                    type: DataTypes.TINYINT({ length: 1 }),
+                slug: {
+                    type: DataTypes.STRING(20),
                     allowNull: false,
                 },
                 createdAt: {
@@ -39,43 +28,29 @@ export default class User extends Model<IUser> {
                     type: DataTypes.DATE(),
                     defaultValue: sequelize.fn("NOW"),
                 },
+                deletedAt: {
+                    type: DataTypes.DATE(),
+                    allowNull: true,
+                },
             },
             {
                 sequelize,
-                tableName: "users",
-                modelName: "user",
+                tableName: "categories",
+                modelName: "category",
                 charset: "utf8",
                 collate: "utf8_unicode_ci",
                 paranoid: true,
                 timestamps: true,
             }
         );
-
-        User.addHook("beforeSave", async (user: Model<IUser>) => {
-            if (user.dataValues.password) {
-                user.setDataValue(
-                    "password",
-                    await bcrypt.hash(user.dataValues.password, 8)
-                );
-            }
-        });
-
-        return User;
     }
 
     static associate() {
-        this.hasOne(Notice, {
-            foreignKey: "author",
-            sourceKey: "_id",
-        });
-
         this.hasOne(Club, {
-            foreignKey: "ownerId",
+            foreignKey: "categoryId",
+            as: "category",
             sourceKey: "_id",
+            onDelete: "CASCADE",
         });
-    }
-
-    async validatePassword(password: string) {
-        return await bcrypt.compare(password, this.dataValues.password);
     }
 }

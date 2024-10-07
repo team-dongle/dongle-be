@@ -16,4 +16,11 @@ export const env = {
         password: process.env.MYSQL_PASSWORD,
         schema: process.env.MYSQL_DATABASE,
     },
+    jwt: {
+        secret: process.env.JWT_SECRET_KEY,
+        expire: process.env.JWT_EXPIRE,
+    },
+    cookie: {
+        domain: process.env.COOKIE_DOMAIN,
+    },
 };
