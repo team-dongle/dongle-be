@@ -23,7 +23,6 @@
         "emitDecoratorMetadata": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "skipDefaultLibCheck": true,
         "lib": [
             "es5",
             "es6",

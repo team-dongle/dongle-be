@@ -6,7 +6,7 @@ import path from "path";
 
 const modelFiles = fs
     .readdirSync(path.join(__dirname, "/../models/"))
-    .filter((file) => file.endsWith(".ts"));
+    .filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
 const sequelize = new Sequelize(
     env.db.schema,
