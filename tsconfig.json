@@ -23,6 +23,7 @@
         "emitDecoratorMetadata": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
+        "skipDefaultLibCheck": true,
         "lib": [
             "es5",
             "es6",
@@ -38,5 +39,7 @@
             "es2015.symbol.wellknown",
             "esnext.asynciterable"
         ]
-    }
+    },
+    "exclude": ["node_modules"],
+    "include": ["./src/**/*.ts"]
 }
