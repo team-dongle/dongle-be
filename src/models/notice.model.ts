@@ -17,8 +17,12 @@ export default class Notice extends Model<INotice> {
                     allowNull: false,
                 },
                 content: {
-                    type: DataTypes.STRING(50),
+                    type: DataTypes.TEXT(),
                     allowNull: false,
+                },
+                attachment: {
+                    type: DataTypes.JSON(),
+                    allowNull: true,
                 },
                 createdAt: {
                     type: DataTypes.DATE(),
